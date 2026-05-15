@@ -319,6 +319,45 @@ add_action( 'elementor/widgets/register', function( $widgets_manager ) {
 
             /*
             =========================
+            SUBTITLE
+            =========================
+            */
+
+            $this->start_controls_section(
+                'section_subtitle_style',
+                [
+                    'label' => 'Subtitle',
+                    'tab' => Controls_Manager::TAB_STYLE,
+                ]
+            );
+
+            $this->add_control(
+                'subtitle_color',
+                [
+                    'label' => 'Color',
+                    'type' => Controls_Manager::COLOR,
+                    'selectors' => [
+                        '{{WRAPPER}} .jl-pricing-subtitle' => 'color: {{VALUE}};',
+                    ],
+                ]
+            );
+
+            $this->add_group_control(
+                Group_Control_Typography::get_type(),
+                [
+                    'name' => 'subtitle_typography',
+                    'selector' => '{{WRAPPER}} .jl-pricing-subtitle',
+                ]
+            );
+
+            $this->end_controls_section();
+
+
+
+
+
+            /*
+            =========================
             PRICE
             =========================
             */
@@ -492,7 +531,9 @@ add_action( 'elementor/widgets/register', function( $widgets_manager ) {
 
                     ?>
 
-                    <div class="jl-pricing-card <?php echo $featured ? 'is-featured' : ''; ?>">
+                    <?php $card_classes = $featured && ! empty( $plan['badge_text'] ) ? 'is-featured has-badge' : ( $featured ? 'is-featured' : '' ); ?>
+
+                    <div class="jl-pricing-card <?php echo esc_attr( $card_classes ); ?>">
 
                         <?php if ( $featured && ! empty( $plan['badge_text'] ) ) : ?>
 
