@@ -10,12 +10,34 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
+// Constantes base para centralizar rutas y facilitar una futura modularización.
+define( 'JL_PRICING_TABLE_WIDGET_VERSION', '1.3' );
+define( 'JL_PRICING_TABLE_WIDGET_FILE', __FILE__ );
+define( 'JL_PRICING_TABLE_WIDGET_URL', plugin_dir_url( JL_PRICING_TABLE_WIDGET_FILE ) );
+
 use Elementor\Widget_Base;
 use Elementor\Controls_Manager;
 use Elementor\Repeater;
 use Elementor\Group_Control_Typography;
 use Elementor\Group_Control_Border;
 use Elementor\Icons_Manager;
+
+/**
+ * Registra la hoja de estilos principal del widget.
+ *
+ * Elementor se encarga de encolarla cuando el widget declara la dependencia
+ * mediante get_style_depends(), y el render la refuerza para compatibilidad.
+ */
+function jl_pricing_table_register_styles() {
+    wp_register_style(
+        'jl-pricing-table',
+        JL_PRICING_TABLE_WIDGET_URL . 'assets/css/jl-pricing-table.css',
+        [],
+        JL_PRICING_TABLE_WIDGET_VERSION
+    );
+}
+add_action( 'wp_enqueue_scripts', 'jl_pricing_table_register_styles' );
+add_action( 'elementor/editor/after_enqueue_styles', 'jl_pricing_table_register_styles' );
 
 add_action( 'elementor/widgets/register', function( $widgets_manager ) {
 
@@ -39,6 +61,10 @@ add_action( 'elementor/widgets/register', function( $widgets_manager ) {
 
         public function get_categories() {
             return [ 'general' ];
+        }
+
+        public function get_style_depends() {
+            return [ 'jl-pricing-table' ];
         }
 
         protected function register_controls() {
@@ -445,6 +471,9 @@ add_action( 'elementor/widgets/register', function( $widgets_manager ) {
                 return;
             }
 
+            // Encola el CSS externo del widget sin imprimir estilos inline en el render.
+            wp_enqueue_style( 'jl-pricing-table' );
+
             ?>
 
             <div class="jl-pricing-wrapper">
@@ -544,156 +573,6 @@ add_action( 'elementor/widgets/register', function( $widgets_manager ) {
                 <?php endforeach; ?>
 
             </div>
-
-            <style>
-
-                .jl-pricing-wrapper{
-                    display:grid;
-                    grid-template-columns:repeat(4,1fr);
-                    gap:28px;
-                }
-
-                .jl-pricing-card{
-                    position:relative;
-                    border:1px solid;
-                    overflow:hidden;
-                    min-height:720px;
-                    color:#fff;
-                }
-
-                .jl-pricing-card.is-featured{
-                    transform:translateY(-18px);
-                }
-
-                .jl-pricing-content{
-                    padding:48px;
-                    display:flex;
-                    flex-direction:column;
-                    height:100%;
-                    position:relative;
-                }
-
-                .jl-pricing-header{
-    display:flex;
-    justify-content:space-between;
-    align-items:flex-start;
-    gap:20px;
-}
-
-        .jl-pricing-heading{
-    flex:1;
-}
-
-.jl-pricing-icon{
-    opacity:.10;
-    color:#83c8f6;
-    line-height:1;
-    flex-shrink:0;
-    margin-top:-8px;
-}
-
-                .jl-pricing-icon svg{
-                    width:58px;
-                    height:58px;
-                    fill:currentColor;
-                }
-
-                .jl-pricing-icon i{
-                    font-size:58px;
-                }
-
-                .jl-pricing-badge{
-                    position:absolute;
-                    top:0;
-                    left:50%;
-                    transform:translateX(-50%);
-                    background:#83c8f6;
-                    color:#000;
-                    padding:14px 34px;
-                    font-size:12px;
-                    font-weight:700;
-                    letter-spacing:4px;
-                    z-index:10;
-                }
-
-                .jl-pricing-title{
-                    margin:0;
-                    font-size:34px;
-                    font-weight:800;
-                }
-
-                .jl-pricing-subtitle{
-                    margin-top:10px;
-                    opacity:.5;
-                    text-transform:uppercase;
-                    letter-spacing:2px;
-                    font-size:12px;
-                }
-
-                .jl-pricing-price{
-                    margin-top:50px;
-                    font-size:64px;
-                    line-height:1;
-                    font-weight:800;
-                }
-
-                .jl-pricing-vat{
-                    margin-top:12px;
-                    opacity:.5;
-                    font-size:12px;
-                }
-
-                .jl-pricing-features{
-                    list-style:none;
-                    padding:0;
-                    margin:50px 0 0;
-                    display:flex;
-                    flex-direction:column;
-                    gap:22px;
-                }
-
-                .jl-pricing-features li{
-                    display:flex;
-                    gap:14px;
-                    align-items:flex-start;
-                }
-
-                .jl-check{
-                    color:#83c8f6;
-                    font-weight:bold;
-                }
-
-                .jl-pricing-button{
-                    margin-top:auto;
-                    min-height:60px;
-                    display:flex;
-                    align-items:center;
-                    justify-content:center;
-                    text-decoration:none;
-                    transition:.3s ease;
-                }
-
-                @media(max-width:1024px){
-
-                    .jl-pricing-wrapper{
-                        grid-template-columns:repeat(2,1fr);
-                    }
-
-                }
-
-                @media(max-width:767px){
-
-                    .jl-pricing-wrapper{
-                        grid-template-columns:1fr;
-                    }
-
-                    .jl-pricing-card.is-featured{
-                        transform:none;
-                    }
-
-                }
-
-            </style>
 
             <?php
         }
