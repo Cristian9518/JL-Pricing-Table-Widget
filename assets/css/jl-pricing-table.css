@@ -20,14 +20,14 @@
 }
 
 .jl-pricing-card.is-featured {
-    transform: translateY(-18px);
+    transform: none;
 }
 
 .jl-pricing-content {
     position: relative;
     display: flex;
+    flex: 1;
     flex-direction: column;
-    height: 100%;
     padding: 48px;
 }
 
@@ -61,12 +61,11 @@
     font-size: 58px;
 }
 
-/* Badge destacado: centrado, acotado al ancho de la card y adaptable en móviles. */
+/* Badge destacado: siempre en el flujo normal; no usar position absolute porque tapa título y subtítulo. */
 .jl-pricing-badge {
-    position: absolute;
-    top: 0;
-    left: 50%;
-    z-index: 10;
+    position: static;
+    align-self: center;
+    flex: 0 0 auto;
     box-sizing: border-box;
     max-width: calc(100% - 32px);
     padding: 14px 34px;
@@ -78,7 +77,6 @@
     letter-spacing: 4px;
     text-align: center;
     background: #83c8f6;
-    transform: translateX(-50%);
 }
 
 /* Tipografía y contenido */
@@ -149,10 +147,6 @@
 @media (max-width: 767px) {
     .jl-pricing-wrapper {
         grid-template-columns: 1fr;
-    }
-
-    .jl-pricing-card.is-featured {
-        transform: none;
     }
 
     .jl-pricing-badge {
