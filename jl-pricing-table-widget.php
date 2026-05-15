@@ -2,7 +2,7 @@
 /**
  * Plugin Name: JL Pricing Table Widget
  * Description: Widget personalizado de Elementor para tablas de precios.
- * Version: 1.3.1
+ * Version: 1.3
  * Author: JL
  */
 
@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Constantes base para centralizar rutas y facilitar una futura modularización.
-define( 'JL_PRICING_TABLE_WIDGET_VERSION', '1.3.1' );
+define( 'JL_PRICING_TABLE_WIDGET_VERSION', '1.3' );
 define( 'JL_PRICING_TABLE_WIDGET_FILE', __FILE__ );
 define( 'JL_PRICING_TABLE_WIDGET_URL', plugin_dir_url( JL_PRICING_TABLE_WIDGET_FILE ) );
 
